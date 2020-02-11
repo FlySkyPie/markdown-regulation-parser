@@ -29,4 +29,12 @@ class PreprocessorTest extends TestCase {
     $this->assertEquals($target, $p->getString());
   }
 
+  public function test_remove_empty_line() {
+    $source = file_get_contents(__DIR__ . '/test4a.md');
+    $target = file_get_contents(__DIR__ . '/test4b.md');
+
+    $p = new Preprocessor($source);
+    $this->assertEquals($target, $p->getString());
+  }
+
 }

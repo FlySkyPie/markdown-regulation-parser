@@ -12,6 +12,7 @@ class Preprocessor {
     $this->normalizeLevel1Heading();
     $this->normalizeIndent();
     $this->normalizeList();
+    $this->removeEmptyLine();
   }
 
   public function getString(): string {
@@ -22,14 +23,19 @@ class Preprocessor {
     $this->preg_replace('/(.+)\n\={3,}(?:\n|$)/', '# $1');
   }
 
-  private function normalizeList(){
-    $this->preg_replace('/[0-9]+. (.+)/', '- $1')
-            ->preg_replace('/\* (.+)/', '- $1');
+  private function normalizeList() {
+    $this->preg_replace('/[0-9]+. (.+)/m', '- $1')
+            ->preg_replace('/\* (.+)/m', '- $1');
   }
-  
-  private function normalizeIndent(){
+
+  private function normalizeIndent() {
     $this->preg_replace('/ {4}/', "\t");
   }
+
+  private function removeEmptyLine() {
+    $this->preg_replace('/^(?:[\t ]*(?:\r?\n|\r))+/m', "");
+  }
+
   /*
    * Make preg_replace be method of object.
    */
