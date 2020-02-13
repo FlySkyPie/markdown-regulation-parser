@@ -5,7 +5,7 @@ namespace FlySkyPie\MarkdownRegulationParser;
 /**
  * To parse name, histories and clauses of regulation.
  *
- * @author flyskypie
+ * @author FlyKkyPie (Wei Ji)
  */
 class Parser {
 
@@ -14,6 +14,11 @@ class Parser {
   private $regulationName;
   private $regulationHistories = [];
   private $regulations;
+
+  /*
+   * The parameter should pass markdown which normalize alreadly.
+   * @param string $markdownString
+   */
 
   function __construct(string $markdownString) {
     $this->sourceString = $markdownString;
@@ -50,10 +55,10 @@ class Parser {
     $matche = [];
     $pattern = '/^# (.+)(?:\n|$)/m';
     if (\preg_match($pattern, $this->sourceString, $matche)) {
-      $this->sourceString = preg_replace($pattern, '', $this->sourceString);
+      $this->sourceString = \preg_replace($pattern, '', $this->sourceString);
       $this->regulationName = $matche[1];
     } else {
-      throw new Exception('The name of regulation not found.');
+      throw new \Exception('The name of regulation not found.');
     }
   }
 
@@ -69,7 +74,7 @@ class Parser {
       $this->sourceString = \preg_replace($pattern, '', $this->sourceString);
       $this->regulationHistories = $matches[1];
     } else {
-      throw new Exception('History not found.');
+      throw new \Exception('Histories not found.');
     }
   }
 
@@ -113,8 +118,7 @@ class Parser {
    */
 
   private function getLevelOneChunks() {
-    $lines = \array_filter(\preg_split("/((\r?\n)|(\r\n?))/", $this->sourceString));
-    //print_r($lines);
+    $lines = \preg_split("/((\r?\n)|(\r\n?))/", $this->sourceString);
     $chunks = [];
     $index = 0;
     foreach ($lines as $line) {

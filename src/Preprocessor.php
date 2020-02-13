@@ -2,6 +2,10 @@
 
 namespace FlySkyPie\MarkdownRegulationParser;
 
+/*
+ * Preprocess the markdown regulation.
+ */
+
 class Preprocessor {
 
   private $markdownString;
