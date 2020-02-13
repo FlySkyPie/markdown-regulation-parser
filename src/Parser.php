@@ -46,6 +46,19 @@ class Parser {
     return $this->isChaptered;
   }
 
+  public function getJSON(): string {
+    $array = [
+        'name' => $this->regulationName,
+        'histories' => $this->regulationHistories,
+        'is-chaptered' => $this->isChaptered,
+        'regulations' => $this->regulations
+    ];
+
+    $preJson = json_encode($array,
+            JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES);
+    return str_replace("[]", "{}", $preJson);
+  }
+
   /*
    * Find level-1 headings and remove it(them),
    * but saved first one as name of regulation.

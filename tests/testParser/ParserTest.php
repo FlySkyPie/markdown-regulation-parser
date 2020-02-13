@@ -65,7 +65,7 @@ class ParserTest extends TestCase {
         'Article 1' => [
             'Paragraph 1' => [
                 'Subsection 1' => [
-                    'Item 1'=>[]
+                    'Item 1' => []
                 ]
             ]
         ]
@@ -73,6 +73,14 @@ class ParserTest extends TestCase {
 
     $p = new Parser($source);
     $this->assertEquals($target, $p->getRegulations());
+  }
+
+  public function test_get_json() {
+    $source = file_get_contents(__DIR__ . '/test6a.md');
+    $target = file_get_contents(__DIR__ . '/test6b.md');
+
+    $p = new Parser($source);
+    $this->assertEquals($target, $p->getJSON());
   }
 
 }
