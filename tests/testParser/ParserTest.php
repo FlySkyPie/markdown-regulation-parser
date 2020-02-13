@@ -24,14 +24,14 @@ class ParserTest extends TestCase {
     $this->assertEquals(['amendment1', 'amendment2'], $p->getHistories());
   }
 
-  public function test_is_chaptered_1() {
+  public function test_is_not_chaptered() {
     $source = file_get_contents(__DIR__ . '/test1.md');
 
     $p = new Parser($source);
     $this->assertEquals(false, $p->isChaptered());
   }
 
-  public function test_is_chaptered_2() {
+  public function test_is_chaptered() {
     $source = file_get_contents(__DIR__ . '/test2.md');
 
     $p = new Parser($source);
@@ -41,8 +41,8 @@ class ParserTest extends TestCase {
   public function test_get_regulations_without_chapter() {
     $source = file_get_contents(__DIR__ . '/test3.md');
     $target = [
-        ['Article 1' => ['Paragraph 1']],
-        ['Article 2' => ['Paragraph 1', 'Paragraph 2']],
+        'Article 1' => ['Paragraph 1' => []],
+        'Article 2' => ['Paragraph 1' => [], 'Paragraph 2' => []],
     ];
 
     $p = new Parser($source);
@@ -62,13 +62,10 @@ class ParserTest extends TestCase {
   public function test_get_regulations_with_nested() {
     $source = file_get_contents(__DIR__ . '/test5.md');
     $target = [
-        ['Article 1' => [
-                ['Paragraph 1' => [
-                        ['Subsection 1' => [
-                                'Item 1'
-                            ]
-                        ]
-                    ]
+        'Article 1' => [
+            'Paragraph 1' => [
+                'Subsection 1' => [
+                    'Item 1'=>[]
                 ]
             ]
         ]

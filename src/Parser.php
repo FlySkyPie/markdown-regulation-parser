@@ -99,7 +99,10 @@ class Parser {
     $templateChunks = $this->getLevelOneChunks();
 
     foreach ($templateChunks as $chunk) {
-      $chunks[] = $this->parseChunk($chunk);
+      $subKey = '';
+      $subsubObject = [];
+      $this->parseChunk($chunk, $subKey, $subsubObject);
+      $chunks[$subKey] = $subsubObject;
     }
 
     $this->regulations = $chunks;
@@ -126,9 +129,8 @@ class Parser {
         continue;
       }
 
-      $chunks[$index][] = $line;//\preg_replace('/^\t/', '', $line);
+      $chunks[$index][] = $line;
     }
-    //print_r($chunks);
     return $chunks;
   }
 
@@ -138,20 +140,20 @@ class Parser {
    * @param array $lines
    */
 
-  private function parseChunk(array $lines) {
-    $firstLine = \array_shift($lines);
+  private function parseChunk(array $lines, string &$key, array &$subchunk) {
+    $key = \array_shift($lines);
 
-    $subchunks = $this->parseSubcunk($lines);
+    $preprocessSubchunks = $this->parseSubcunk($lines);
+    $subObject = [];
 
-    if (!empty($subchunks)) {
-      $chunkTree = [];
-      foreach ($subchunks as $chunk) {
-        $chunkTree [] = $this->parseChunk($chunk);
-      }
-      return [$firstLine => $chunkTree];
-    } else {
-      return $firstLine;
+    foreach ($preprocessSubchunks as $preprocessChunk) {
+      $subKey = '';
+      $subsubObject = [];
+      $this->parseChunk($preprocessChunk, $subKey, $subsubObject);
+      $subObject [$subKey] = $subsubObject;
     }
+
+    $subchunk = $subObject;
   }
 
   /*
@@ -160,8 +162,6 @@ class Parser {
    */
 
   private function parseSubcunk(array $lines) {
-    //print("TEST\n");
-    //print_r($lines);
     $subchunks = [];
 
     $index = 0;
@@ -180,9 +180,8 @@ class Parser {
         continue;
       }
 
-      $subchunks[$index][] =  $line;//\preg_replace('/^\t/', '', $line);
+      $subchunks[$index][] = $line;
     }
-    //print_r($subchunks);
     return $subchunks;
   }
 
